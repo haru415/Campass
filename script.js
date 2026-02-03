@@ -5,7 +5,6 @@ const timetable = document.getElementById('timetable');
 const nameInput = document.getElementById('subject-name');
 const roomInput = document.getElementById('room-name');
 
-// 曜日切り替え
 window.changeDay = (day) => {
     currentDay = day;
     document.getElementById('current-day-display').innerText = `${day}曜日の講義`;
@@ -23,39 +22,41 @@ function render() {
         const maxAbsent = 3;
         const remaining = maxAbsent - sub.absent;
         
-        // 危険度の判定
         let statusClass = 'border-safe';
         let alertMsg = `あと ${remaining} 回休めます`;
+        
         if (remaining === 1) {
             statusClass = 'border-warning';
-            alertMsg = `【注意】あと 1 回しか休めません！`;
+            alertMsg = `【注意】あと 1 回しか休めません`;
         } else if (remaining <= 0) {
             statusClass = 'border-danger';
-            alertMsg = `【危険】単位取得が厳しい状態です`;
+            alertMsg = `【危険】単位取得が不可能です`;
         }
 
         const card = document.createElement('div');
         card.className = `card ${statusClass}`;
         card.innerHTML = `
-            <h3>${sub.name} <small style="color:#999; font-size:0.6em;">@${sub.room}</small></h3>
-            
-            <div style="display: flex; gap: 15px; margin-bottom: 5px; font-size: 0.9em;">
-                <span style="color: var(--safe); font-weight: bold;">出席: ${sub.present || 0} 回</span>
-                <span style="color: var(--danger); font-weight: bold;">欠席: ${sub.absent} 回</span>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <h3 style="margin:0;">${sub.name}</h3>
+                <span style="font-size:12px; color:#666;">${sub.room}</span>
             </div>
             
-            <p class="alert-text" style="color: ${remaining <= 0 ? 'red' : '#333'}">${alertMsg}</p>
+            <div class="attendance-counts">
+                <span style="color:var(--safe)">出席: ${sub.present || 0}</span>
+                <span style="color:var(--danger)">欠席: ${sub.absent}</span>
+            </div>
             
-            <div class="btn-group" style="display: flex; gap: 10px;">
-                <button class="present-btn" onclick="updateAttendance('${sub.id}', 'present')" style="flex:1; padding: 10px; background: #E1F5FE; border: 1px solid #007AFF; border-radius: 8px; color: #007AFF;">出席を記録</button>
-                <button class="absent-btn" onclick="updateAttendance('${sub.id}', 'absent')" style="flex:1; padding: 10px; background: #FFEBEE; border: 1px solid #FF3B30; border-radius: 8px; color: #FF3B30;">欠席を記録</button>
+            <div class="alert-text">${alertMsg}</div>
+            
+            <div class="btn-group">
+                <button class="present-btn" onclick="updateAttendance('${sub.id}', 'present')">出席</button>
+                <button class="absent-btn" onclick="updateAttendance('${sub.id}', 'absent')">欠席</button>
             </div>
 
             <div class="memo-area">
-                <strong>メモ:</strong><br>
                 <span contenteditable="true" onblur="updateMemo('${sub.id}', this.innerText)">${sub.memo || ''}</span>
             </div>
-            <button class="delete-btn" onclick="deleteSubject('${sub.id}')" style="margin-top:10px; font-size:10px; color:#ccc; border:none; background:none; cursor:pointer; width:100%; text-align:right;">講義を削除</button>
+            <button class="delete-btn" onclick="deleteSubject('${sub.id}')">講義を削除</button>
         `;
         timetable.appendChild(card);
     });
@@ -63,51 +64,46 @@ function render() {
     localStorage.setItem('campus-subjects-v2', JSON.stringify(subjects));
 }
 
-// 追加機能
 document.getElementById('add-btn').onclick = () => {
     const name = nameInput.value.trim();
     if (!name) return;
     
-    const newSub = {
+    subjects.push({
         id: Date.now().toString(),
         name: name,
-        room: roomInput.value || '未定',
+        room: roomInput.value || '教室未設定',
         day: currentDay,
-        present: 0, // 初期値を追加
+        present: 0,
         absent: 0,
         memo: ''
-    };
+    });
     
-    subjects.push(newSub);
     nameInput.value = '';
     roomInput.value = '';
     render();
 };
 
-// 出席・欠席更新
 window.updateAttendance = (id, type) => {
     const sub = subjects.find(s => s.id === id);
-    if (type === 'present') {
-        sub.present = (sub.present || 0) + 1;
-    } else if (type === 'absent') {
-        sub.absent++;
-    }
+    if (type === 'present') sub.present = (sub.present || 0) + 1;
+    else if (type === 'absent') sub.absent++;
     render();
 };
 
-// メモ更新
 window.updateMemo = (id, text) => {
     const sub = subjects.find(s => s.id === id);
-    if(sub) sub.memo = text;
-    localStorage.setItem('campus-subjects-v2', JSON.stringify(subjects));
+    if (sub) {
+        sub.memo = text;
+        localStorage.setItem('campus-subjects-v2', JSON.stringify(subjects));
+    }
 };
 
-// 削除
 window.deleteSubject = (id) => {
-    if (confirm('この講義を削除しますか？')) {
+    if (confirm('講義を削除しますか？')) {
         subjects = subjects.filter(s => s.id !== id);
         render();
     }
 };
 
-chchangeDay('月');
+// 起動時に月曜日を表示
+changeDay('月');
