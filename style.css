@@ -66,8 +66,12 @@ header {
     font-weight: bold;
     font-size: 0.85em;
     margin: 5px 0;
+}
 
-    /* メモエリアの基本スタイル */
+.add-form { display: flex; gap: 5px; }
+.primary-btn { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; }
+
+/* メモエリアの基本スタイル */
 .memo-area span {
     display: block;
     min-height: 1.2em;
@@ -85,7 +89,3 @@ header {
 .memo-area span:focus:before {
     content: "";
 }
-}
-
-.add-form { display: flex; gap: 5px; }
-.primary-btn { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; }
