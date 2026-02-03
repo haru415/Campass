@@ -1,1 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusPass - 出席・単位管理</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>CampusPass</h1>
+            <div class="day-tabs">
+                <button onclick="changeDay('月')">月</button>
+                <button onclick="changeDay('火')">火</button>
+                <button onclick="changeDay('水')">水</button>
+                <button onclick="changeDay('木')">木</button>
+                <button onclick="changeDay('金')">金</button>
+            </div>
+        </header>
 
+        <main>
+            <section class="add-form card">
+                <input type="text" id="subject-name" placeholder="講義名">
+                <input type="text" id="room-name" placeholder="教室 (任意)" style="width: 80px;">
+                <button id="add-btn" class="primary-btn">追加</button>
+            </section>
+
+            <h2 id="current-day-display">月曜日の講義</h2>
+            <div id="timetable"></div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
