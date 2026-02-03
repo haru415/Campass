@@ -1,37 +1,46 @@
 :root {
     --primary: #007AFF;
-    --safe: #34C759;    /* 青（安全） */
-    --warning: #FFCC00; /* 黄（注意） */
-    --danger: #FF3B30;  /* 赤（危険） */
+    --safe: #34C759;
+    --warning: #FFCC00;
+    --danger: #FF3B30;
     --bg: #F2F2F7;
+    --card-bg: #ffffff;
 }
 
 body {
-    font-family: -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: var(--bg);
     margin: 0;
+    color: #333;
+    -webkit-tap-highlight-color: transparent;
 }
 
 header {
     background: white;
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-    position: sticky; top: 0; z-index: 100;
+    padding: 15px 15px 10px;
+    border-bottom: 1px solid #d1d1d6;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
+
+h1 { font-size: 20px; margin: 0 0 10px; color: var(--primary); text-align: center; }
 
 .day-tabs {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    gap: 5px;
 }
 
 .day-tabs button {
+    flex: 1;
     border: none;
-    background: #E5E5EA;
-    padding: 8px 12px;
-    border-radius: 8px;
+    background: #e5e5ea;
+    padding: 10px 0;
+    border-radius: 10px;
     font-weight: bold;
-    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
 }
 
 .day-tabs button.active {
@@ -39,53 +48,99 @@ header {
     color: white;
 }
 
+main { padding: 10px; }
+
 .card {
-    background: white;
-    margin: 15px;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    border-left: 8px solid #ccc; /* 危険度で色が変わる部分 */
+    background: var(--card-bg);
+    margin-bottom: 15px;
+    padding: 16px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-left: 6px solid #ccc;
 }
 
-/* 危険度別ボーダー */
 .border-safe { border-left-color: var(--safe); }
 .border-warning { border-left-color: var(--warning); }
 .border-danger { border-left-color: var(--danger); }
 
-.memo-area {
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #666;
-    background: #F9F9F9;
-    padding: 8px;
-    border-radius: 4px;
+.add-form {
+    display: flex;
+    gap: 8px;
+    border-left: none;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #d1d1d6;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+#subject-name { flex: 1; }
+
+.primary-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.attendance-counts {
+    display: flex;
+    gap: 20px;
+    margin: 10px 0;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .alert-text {
+    font-size: 13px;
+    margin-bottom: 12px;
     font-weight: bold;
-    font-size: 0.85em;
-    margin: 5px 0;
 }
 
-.add-form { display: flex; gap: 5px; }
-.primary-btn { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; }
-
-/* メモエリアの基本スタイル */
-.memo-area span {
-    display: block;
-    min-height: 1.2em;
-    outline: none;
+.btn-group {
+    display: flex;
+    gap: 10px;
 }
 
-/* spanが空（かつフォーカスされていない）の時に「擬似要素」でヒントを表示 */
+.btn-group button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.present-btn { background: #e1f5fe; color: #0288d1; }
+.absent-btn { background: #ffebee; color: #d32f2f; }
+
+.memo-area {
+    margin-top: 15px;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+/* プレースホルダー機能 */
+.memo-area span { display: block; min-height: 1.2em; outline: none; }
 .memo-area span:empty:before {
     content: "タップしてメモを入力...";
-    color: #ccc;
-    cursor: text;
+    color: #bbb;
 }
 
-/* 入力中（フォーカス時）はヒントを消す */
-.memo-area span:focus:before {
-    content: "";
+.delete-btn {
+    display: block;
+    width: 100%;
+    text-align: right;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 11px;
+    margin-top: 10px;
+    text-decoration: underline;
 }
