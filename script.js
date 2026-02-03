@@ -110,4 +110,4 @@ window.deleteSubject = (id) => {
     }
 };
 
-changeDay('月');
+chchangeDay('月');
